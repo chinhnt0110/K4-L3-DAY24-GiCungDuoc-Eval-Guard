@@ -80,6 +80,13 @@ class DenseSearch:
         from qdrant_client.models import Distance, VectorParams, PointStruct
 
         if self.client.collection_exists(collection):
+            try:
+                coll_info = self.client.get_collection(collection)
+                if coll_info.points_count == len(chunks):
+                    print(f"  ✓ Collection '{collection}' already contains {coll_info.points_count} points. Skipping re-indexing.")
+                    return
+            except Exception:
+                pass
             self.client.delete_collection(collection)
         self.client.create_collection(
             collection,
@@ -97,10 +104,16 @@ class DenseSearch:
     def search(self, query: str, top_k: int = DENSE_TOP_K, collection: str = COLLECTION_NAME) -> list[SearchResult]:
         """Search using dense vectors."""
         query_vector = self._get_encoder().encode(query).tolist()
-        response = self.client.query_points(collection, query=query_vector, limit=top_k)
+        if hasattr(self.client, "search"):
+            points = self.client.search(collection_name=collection, query_vector=query_vector, limit=top_k)
+        elif hasattr(self.client, "query_points"):
+            response = self.client.query_points(collection, query=query_vector, limit=top_k)
+            points = response.points
+        else:
+            points = []
         return [
             SearchResult(text=pt.payload["text"], score=pt.score, metadata=pt.payload, method="dense")
-            for pt in response.points
+            for pt in points
         ]
 
 

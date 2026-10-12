@@ -182,6 +182,28 @@ def enrich_chunks(
     if methods is None:
         methods = ["combined"]
 
+    cache_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "artifacts", ".cache_enriched_chunks.json")
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, encoding="utf-8") as f:
+                cached_data = json.load(f)
+            if len(cached_data) == len(chunks):
+                enriched = []
+                for chunk, c_data in zip(chunks, cached_data):
+                    enriched_text = c_data.get("text", chunk["text"])
+                    enriched.append(EnrichedChunk(
+                        original_text=chunk["text"],
+                        enriched_text=enriched_text,
+                        summary="",
+                        hypothesis_questions=[],
+                        auto_metadata={**chunk.get("metadata", {}), **{k: v for k, v in c_data.items() if k != "text"}},
+                        method="cached_combined",
+                    ))
+                print(f"  ✓ Loaded {len(enriched)} enriched chunks from cache.")
+                return enriched
+        except Exception:
+            pass
+
     use_combined = "combined" in methods
 
     enriched = []
