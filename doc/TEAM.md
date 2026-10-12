@@ -8,7 +8,7 @@ Trưởng nhóm/người nộp: Vũ Minh Hiếu - 2A202602779
 
 Ngày lab/deadline áp dụng: 2026-10-12 23:59 — Asia/Ho_Chi_Minh (UTC+07:00)
 
-Commit dùng để chấm: 2733efd9b96ee73f756e730fcf435d7a3f75a84f
+Commit dùng để chấm: c50730d9351c05ea7ac1f9ffc90078a30abae955
 
 Mỗi nhóm nộp một repo. Điền đủ thành viên và một mục INDIVIDUAL cho từng người.
 Thêm/xóa rows để khớp nhóm thật; mẫu ba rows không ép nhóm phải có ba người.
@@ -17,9 +17,10 @@ Thêm/xóa rows để khớp nhóm thật; mẫu ba rows không ép nhóm phải
 
 | STT | Họ và tên | MSSV | Vai trò / công việc thật | Bằng chứng |
 |---|---|---|---|---|
-| 1 | Vũ Minh Hiếu | 2A202602779 | Thành viên 1 (RAG Eval & Diagnostics Lead): Chuẩn bị môi trường & Pipeline (m1-m5, Qdrant); Sinh 50 answers; Phase A (Tasks 1-4); Phase B (Tasks 5, 6 và hỗ trợ 7, 8); Soạn thảo failure_clusters.md và bias_report.md | PR/Commits repo; artifacts/answers_50q.json, artifacts/ragas_50q.json, artifacts/judge_results.json; doc/reports/failure_clusters.md, doc/reports/bias_report.md |
+| 1 | Vũ Minh Hiếu | 2A202602779 | Thành viên 1 (RAG Eval & Diagnostics Lead): Chuẩn bị môi trường & Pipeline (m1-m5, Qdrant); Sinh 50 answers; Phase A (Tasks 1-4); Phase B (Tasks 5, 6 và hỗ trợ 7, 8); Soạn thảo failure_clusters.md và bias_report.md | Commit 846a59342778fac0f188b0031dac5b6c2afd8d21 ("Phase A and B"); artifacts/answers_50q.json, artifacts/ragas_50q.json, artifacts/judge_results.json; doc/reports/failure_clusters.md, doc/reports/bias_report.md |
+| 2 | Nguyễn Thị Chinh | 2A202602876 | Thành viên 2 (Safety & Guardrail Lead): Chuẩn hóa adapter m4_eval (evaluator_models metadata); Phase B (Tasks 7, 8: Cohen's Kappa, Bias reporting); Phase C (Tasks 9a-12: Presidio PII scan, NeMo Guardrails, latency p95 benchmark); Tinh chỉnh prompt self_check_input triệt tiêu false positives; Tham gia soạn thảo blueprint.md | Commit c50730d9351c05ea7ac1f9ffc90078a30abae955 ("update phase C"); src/m4_eval.py, src/phase_c_guard.py, guardrails/config.yml, artifacts/guard_results.json, doc/reports/blueprint.md |
 
-Người tích hợp/chạy batch/nộp link: Vũ Minh Hiếu — Tích hợp pipeline 5 module m1-m5 từ lab trước, chuẩn bị và nạp dữ liệu Qdrant Vector DB, chạy batch setup sinh 50 answers, thực thi batch experiments Phase A & Phase B, kiểm tra offline unit tests (86/86 passed) và nộp link repository GitHub.
+Người tích hợp/chạy batch/nộp link: Vũ Minh Hiếu & Nguyễn Thị Chinh — Tích hợp pipeline 5 module m1-m5 từ lab trước, chuẩn bị và nạp dữ liệu Qdrant Vector DB, chạy batch setup sinh 50 answers, thực thi batch experiments Phase A, Phase B và Phase C, kiểm tra offline unit tests (86/86 passed) và nộp link repository GitHub.
 
 ## Môi trường và chuẩn bị trước lớp
 
@@ -46,7 +47,7 @@ Sao chép mẫu cho mỗi thành viên; tiêu đề họ tên không dấu-MSSV.
     * Chạy thực nghiệm live Phase B tạo ra `artifacts/judge_results.json` với Cohen's Kappa đạt 1.0 (Hoàn hảo, vượt ngưỡng bonus 0.6) và position bias rate = 0.0%. Soạn thảo báo cáo phân tích bias `doc/reports/bias_report.md`.
     * Hỗ trợ triển khai các hàm PII scanning, async rail checks, latency percentiles trong `src/phase_c_guard.py` và bảo đảm toàn bộ test suite offline 86 test cases vượt qua hoàn hảo.
 - Bằng chứng:
-  + Các commit và mã nguồn: `src/m2_search.py`, `src/m5_enrichment.py`, `src/phase_a_ragas.py`, `src/phase_b_judge.py`, `src/phase_c_guard.py`.
+  + Các commit và mã nguồn: Commit 846a59342778fac0f188b0031dac5b6c2afd8d21 ("Phase A and B") — `src/m2_search.py`, `src/m5_enrichment.py`, `src/phase_a_ragas.py`, `src/phase_b_judge.py`.
   + File dữ liệu thực nghiệm đã sinh: `artifacts/answers_50q.json`, `artifacts/ragas_50q.json`, `artifacts/judge_results.json`.
   + Báo cáo phân tích chuyên sâu: `doc/reports/failure_clusters.md`, `doc/reports/bias_report.md`.
 - Cách kiểm tra:
@@ -66,6 +67,38 @@ Sao chép mẫu cho mỗi thành viên; tiêu đề họ tên không dấu-MSSV.
 - Nguồn/AI hỗ trợ nếu có:
   + Tài liệu chính thức của RAGAS, Qdrant Client API docs, OpenAI Cookbook, NeMo Guardrails documentation.
   + Sử dụng trợ lý Antigravity AI để hỗ trợ gỡ lỗi tương thích phiên bản thư viện qdrant-client và cấu trúc schema Draft 2020-12; toàn bộ code logic, chạy thử nghiệm và phân tích số liệu đều được tác giả trực tiếp kiểm chứng và thực thi.
+
+### NguyenThiChinh-2A202602876
+
+- Phần được giao và phần thực tế đã làm:
+  + Vai trò phân công: Thành viên 2 (Safety & Guardrail Lead) — Phụ trách chuẩn hóa adapter m4_eval, Phase B (Tasks 7, 8: tính Cohen's Kappa, thống kê Position & Verbosity Bias), Phase C (Tasks 9a-12: PII Detection Presidio, NeMo Guardrails input/output rails, benchmark độ trễ P95) và đồng tác giả blueprint.md.
+  + Thực tế đã hoàn thành:
+    * Hoàn thiện adapter `src/m4_eval.py`, bổ sung trường bắt buộc `metadata.evaluator_models` theo chuẩn `PIPELINE_INTERFACE.md`.
+    * Triển khai Task 7 (cohen_kappa) tính toán thỏa thuận giữa LLM Judge và Human Annotation đạt Kappa = 1.0 (vượt ngưỡng bonus 0.6); Task 8 (bias_report) đo lường Position Inconsistency Rate (0.0%) và Verbosity Bias Rate.
+    * Triển khai Task 9a (pii_scan) với Presidio Analyzer/Anonymizer nhận diện chính xác CCCD (12 số), CMND (9 số), SĐT Việt Nam và Email; lọc các thực thể mục tiêu để tránh false positives do Spacy NER tiếng Anh.
+    * Triển khai Task 9b (check_input_rail) và Task 11 (check_output_rail) với NeMo Guardrails Colang 1.0; tinh chỉnh prompt `self_check_input` trong `guardrails/config.yml` phân biệt rõ câu hỏi chính sách bảo mật hợp lệ với yêu cầu trích xuất thông tin bí mật.
+    * Triển khai Task 10 (run_adversarial_suite) và chạy thực nghiệm live đạt **28/28 passed** (20/20 attacks bị chặn, 8/8 clean inputs được cho qua, False Positive Rate = 0.0, đạt điều kiện thưởng Bonus Phase C).
+    * Triển khai Task 12 (measure_p95_latency) đo đạc 20 samples thực tế sau 2 lượt warm-up, tính toán p50/p95/p99 nội suy tuyến tính và lưu đầy đủ vào `artifacts/guard_results.json`.
+    * Đồng biên soạn bản thiết kế hệ thống `doc/reports/blueprint.md` đề xuất kiến trúc Guardrail Stack, Quality Gates cho CI/CD và chiến lược Monitoring khi lên Production.
+- Bằng chứng:
+  + Commit/PR mã nguồn: Commit c50730d9351c05ea7ac1f9ffc90078a30abae955 ("update phase C") — `src/m4_eval.py`, `src/phase_c_guard.py`, `guardrails/config.yml`.
+  + File dữ liệu thực nghiệm: `artifacts/guard_results.json`.
+  + Báo cáo Markdown: `doc/reports/blueprint.md`.
+- Cách kiểm tra:
+  + Chạy unit test Phase C: `/opt/miniconda3/envs/k4-day24/bin/python -m pytest tests/test_phase_c.py -q` (12 passed).
+  + Chạy live Phase C runner: `/opt/miniconda3/envs/k4-day24/bin/python scripts/run_experiments.py --phase c --live --latency-samples 20` (28/28 passed).
+  + Kiểm tra toàn diện bài nộp: `/opt/miniconda3/envs/k4-day24/bin/python scripts/check_lab.py --with-tests` (0 failed checks, 86 unit tests passed).
+- Điều đã học:
+  + Kiến trúc phòng thủ nhiều lớp (Defense-in-Depth): Presidio xử lý PII nhanh chóng ở tầng 1 trước khi chuyển sang LLM Guardrails ở tầng 2 để tối ưu hóa độ trễ và chi phí token.
+  + Kỹ thuật kiểm soát Prompt Injection và Jailbreak bằng NeMo Guardrails kết hợp Colang 1.0.
+  + Bản chất của bài toán đánh đổi (Trade-off) giữa Security và Usability trong Guardrails: Việc cấu hình quá khắt khe có thể gây chặn nhầm câu hỏi hợp lệ của người dùng (False Positives), đòi hỏi phải tinh chỉnh prompt phân biệt chính sách và hành vi tấn công.
+  + Phương pháp đo lường độ trễ p95 theo chuẩn production, loại bỏ warm-up runs để số liệu phản ánh đúng runtime thực tế.
+- Giới hạn/cách xử lý:
+  + NeMo Guardrails phụ thuộc vào thư viện `annoy` khó build trên Windows: Đã thiết lập môi trường Unix/Mac (Python 3.11 Conda) để thực thi live experiment đầy đủ và tạo artifact thật.
+  + Nguy cơ False Positives khi Presidio phân tích văn bản tiếng Việt với model Spacy tiếng Anh: Đã xử lý bằng cách lọc tập trung vào các regex pattern tùy chỉnh (VN_CCCD, VN_PHONE, EMAIL_ADDRESS).
+- Nguồn/AI hỗ trợ nếu có:
+  + Microsoft Presidio documentation, NeMo Guardrails Colang documentation.
+  + Sử dụng AI Assistant để hỗ trợ phân tích nguyên nhân lỗi false positive và tối ưu hóa logic lọc thực thể PII.
 
 ## Cập nhật sau khi nộp
 

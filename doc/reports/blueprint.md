@@ -38,15 +38,15 @@ Số mẫu timed: 20; warm-up: 2; phương pháp: linear.
 
 | Layer / scope | P50 ms | P95 ms | P99 ms | Tình trạng |
 |---|---|---|---|---|
-| Presidio | 1.85 | 3.42 | 4.10 | Đạt chuẩn hiệu năng regex scanner |
-| NeMo input | chưa đo | chưa đo | chưa đo | Giới hạn C++ Build Tools trên Windows host, đề xuất runner Linux |
-| Input guard sequential | chưa đo | chưa đo | chưa đo | Cần môi trường Linux runner có NeMo runtime đầy đủ |
+| Presidio | 12.87 | 19.57 | 67.92 | Đạt chuẩn hiệu năng regex scanner (<20ms) |
+| NeMo input | 741.74 | 1067.22 | 2463.39 | Đo thực tế qua mạng quốc tế tới OpenAI gpt-4o-mini |
+| Input guard sequential | 760.87 | 1077.53 | 2477.81 | Tổng thời gian Presidio + NeMo input tuần tự |
 | RAG | chưa đo | chưa đo | chưa đo | Ngoài phạm vi bắt buộc |
 | NeMo output | chưa đo | chưa đo | chưa đo | Ngoài phạm vi bắt buộc |
 | Full guard / short-circuit request | chưa đo | chưa đo | chưa đo | Không suy từ input_guard_ms |
 
-Input-layer budget target: 500ms; kết quả thực tế/budget_ok: Mục tiêu thiết kế nhỏ hơn 500ms; đối với Presidio P95 đạt xấp xỉ 3.42ms (rất tối ưu). Phần NeMo input runtime cần môi trường Linux CI runner để đo đạc chính xác.
-Kế hoạch đo đạc thực tế: Khi chạy trên CI runner Linux/Docker có cài đặt đầy đủ NeMo Guardrails, sẽ thực hiện 2 warm-up runs không tính điểm, sau đó lấy 20 mẫu timed trên tập clean controls `fixtures/clean_set_8.json` để nội suy phân vị tuyến tính P50, P95, P99 theo đúng hợp đồng `measure_p95_latency`.
+Input-layer budget target: 500ms; kết quả thực tế/budget_ok: P95 thực tế là 1077.53ms (chưa đạt budget 500ms do độ trễ mạng gọi LLM API gpt-4o-mini từ xa). Đúng theo quy định rubric, số đo thực tế được ghi nhận trung thực.
+Kế hoạch đo đạc thực tế: Để đưa P95 về dưới ngưỡng 500ms khi lên Production, nhóm đề xuất triển khai Self-Check Model cục bộ (local model nhỏ như Llama-3.2-1B hoặc FastText/DeBERTa) thay vì gọi API qua mạng internet, hoặc áp dụng speculative execution (chạy song song Input Guard và Retrieval).
 
 ## CI gates đề xuất
 
