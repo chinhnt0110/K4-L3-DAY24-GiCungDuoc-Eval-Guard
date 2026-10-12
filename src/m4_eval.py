@@ -36,9 +36,11 @@ def evaluate_ragas(questions: list[str], answers: list[str],
     """Run RAGAS evaluation."""
 
     zeros = {"faithfulness": 0.0, "answer_relevancy": 0.0,
-             "context_precision": 0.0, "context_recall": 0.0, "per_question": []}
+             "context_precision": 0.0, "context_recall": 0.0, "per_question": [],
+             "metadata": {"evaluator_models": ["gpt-4o-mini", "text-embedding-3-small"]}}
     if not questions:
         return zeros
+
     try:
         import asyncio
         from config import OPENAI_API_KEY
@@ -107,6 +109,9 @@ def evaluate_ragas(questions: list[str], answers: list[str],
             "context_precision": sum(r.context_precision for r in per_question) / n,
             "context_recall": sum(r.context_recall for r in per_question) / n,
             "per_question": per_question,
+            "metadata": {
+                "evaluator_models": ["gpt-4o-mini", "text-embedding-3-small"],
+            }
         }
     except Exception as e:
         print(f"  ⚠️  RAGAS evaluation failed: {e}")
